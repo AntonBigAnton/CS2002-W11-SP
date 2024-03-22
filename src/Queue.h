@@ -7,6 +7,7 @@
 
 #ifndef QUEUE_H_
 #define QUEUE_H_
+#define ZERO
 
 #include <stdbool.h>
 
@@ -14,6 +15,9 @@ typedef struct Queue Queue;
 
 /* You should define your struct Queue here */
 struct Queue {
+    void* arr;
+    int capacity;
+    int size;
 };
 
 /*
