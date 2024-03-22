@@ -17,13 +17,13 @@
 
 
 Queue *new_Queue(int max_size) {
-    Queue this;
-    this.arr = malloc(sizeof(void*)*(max_size + 1));
-    this.capacity = max_size;
-    this.size = ZERO;
-    this.front = ZERO;
-    this.rear = -ONE;
-    return this*;
+    Queue* this;
+    (*this).arr = malloc(sizeof(void*)*(max_size + 1));
+    (*this).capacity = max_size;
+    (*this).size = ZERO;
+    (*this).front = ZERO;
+    (*this).rear = -ONE;
+    return this;
 }
 
 bool Queue_enq(Queue* this, void* element) {
