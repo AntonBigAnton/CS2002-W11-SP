@@ -16,7 +16,7 @@ typedef struct Queue Queue;
 
 /* You should define your struct Queue here */
 struct Queue {
-    void* arr;
+    void** arr;
     int capacity;
     int size;
     int front;
