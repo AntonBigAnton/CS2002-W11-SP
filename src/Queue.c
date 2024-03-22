@@ -6,6 +6,7 @@
  */
 
 #include <stddef.h>
+#include <stdlib.h>
 
 #include "Queue.h"
 
@@ -17,7 +18,7 @@
 
 Queue *new_Queue(int max_size) {
     Queue this;
-    this.arr = malloc(sizeof(void)*(max_size + 1));
+    this.arr = malloc(sizeof(void*)*(max_size + 1));
     this.capacity = max_size;
     this.size = ZERO;
     this.front = ZERO;
