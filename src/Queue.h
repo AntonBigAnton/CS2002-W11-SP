@@ -7,7 +7,8 @@
 
 #ifndef QUEUE_H_
 #define QUEUE_H_
-#define ZERO
+#define ZERO 0
+#define ONE 1
 
 #include <stdbool.h>
 
