@@ -18,6 +18,8 @@ struct Queue {
     void* arr;
     int capacity;
     int size;
+    int front:
+    int rear;
 };
 
 /*
