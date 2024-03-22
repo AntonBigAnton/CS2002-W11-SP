@@ -16,7 +16,11 @@
 
 
 Queue *new_Queue(int max_size) {
-    return NULL;
+    Queue this;
+    this.arr = malloc(sizeof(void)*(max_size + 1));
+    this.capacity = max_size;
+    this.size = ZERO;
+    return this*;
 }
 
 bool Queue_enq(Queue* this, void* element) {
