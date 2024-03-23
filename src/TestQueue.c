@@ -87,24 +87,218 @@ int newQueueSizeZero() {
 }
 
 /*
- * Checks that the size of the queue is 1 after enqueueing an element.
+ * Checks that a new queue is empty.
+ */
+int newQueueIsEmpty() {
+    assert(Queue_isEmpty(queue));
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that a non-NULL element can be enqueued to an empty queue.
  */
 int enqOneElement() {
     int one = ONE;
-    void* elt = &one;
-    Queue_enq(queue, elt);
+    assert(Queue_enq(queue, &one));
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that the queue is not empty after enqueueing an element.
+ */
+int enqNotEmpty() {
+    int one = ONE;
+    Queue_enq(queue, &one);
+    assert(Queue_isEmpty(queue) == false);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that the size of the queue is 1 after enqueueing an element to an empty queue.
+ */
+int enqSize() {
+    int one = ONE;
+    Queue_enq(queue, &one);
     assert(Queue_size(queue) == 1);
     return TEST_SUCCESS;
 }
 
 /*
- * Checks that an element can be enqueued and dequeued.
+ * Checks that an element can be enqueued and dequeued to an empty queue.
  */
 int enqAndDeqOneElement() {
     int one = ONE;
-    void* elt = &one;
-    Queue_enq(queue, elt);
-    assert(Queue_deq(queue) == elt);
+    Queue_enq(queue, &one);
+    assert(Queue_deq(queue) == &one);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that the size of the queue is increased by 1 after enqueueing an element.
+ */
+int enqMultipleElements() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    int size = Queue_size(queue);
+    Queue_enq(queue, &zero);
+    assert(Queue_size(queue) == size+1);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that multiple elements can be enqueued and dequeued (testing for the first element).
+ */
+int enqAndDeqFirstElement() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    Queue_enq(queue, &zero);
+    assert(Queue_deq(queue) == &one);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that multiple elements can be enqueued and dequeued (testing for the last element).
+ */
+int enqAndDeqLastElement() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    Queue_enq(queue, &zero);
+    Queue_deq(queue);
+    assert(Queue_deq(queue) == &zero);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that the size of the queue is 0 after dequeueing the final element.
+ */
+int deqSize() {
+    int one = ONE;
+    Queue_enq(queue, &one);
+    Queue_deq(queue);
+    assert(Queue_size(queue) == 0);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that the size of the queue is reduced by 1 after dequeueing an element.
+ */
+int deqMultipleElements() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    Queue_enq(queue, &zero);
+    int size = Queue_size(queue);
+    Queue_deq(queue);
+    assert(Queue_size(queue) == size-1);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that the queue is empty after dequeueing the final element.
+ */
+int deqToEmpty() {
+    int one = ONE;
+    Queue_enq(queue, &one);
+    Queue_deq(queue);
+    assert(Queue_isEmpty(queue));
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that no element can be enqueued to a full queue.
+ */
+int enqFullQueue() {
+    int one = ONE;
+    for (int i = 0; i < 20; i++) {
+        Queue_enq(queue, &one);
+    }
+    assert(Queue_enq(queue, &one) == false);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that no NULL element can be enqueued.
+ */
+int enqNullElement() {
+    assert(Queue_enq(queue, NULL) == false);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that dequeueing from an empty queue returns NULL.
+ */
+int deqFromEmpty() {
+    assert(Queue_deq(queue) == NULL);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that clearing a queue makes it empty.
+ */
+int clearToEmpty() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    Queue_enq(queue, &zero);
+    Queue_clear(queue);
+    assert(Queue_isEmpty(queue));
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that clearing a queue sets its size to 0.
+ */
+int clearSize() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    Queue_enq(queue, &zero);
+    Queue_clear(queue);
+    assert(Queue_size(queue) == 0);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that an element can be enqueued after clearing the queue.
+ */
+int enqAfterClearing() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    Queue_enq(queue, &zero);
+    Queue_clear(queue);
+    assert(Queue_enq(queue, &one));
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that the size of the queue is 1 after enqueueing an element to a cleared queue.
+ */
+int enqClearedSize() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    Queue_enq(queue, &zero);
+    Queue_clear(queue);
+    Queue_enq(queue, &one);
+    assert(Queue_size(queue) == 1);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that an element can be enqueued and dequeued after clearing the queue.
+ */
+int enqAndDeqAfterClearing() {
+    int one = ONE;
+    int zero = ZERO;
+    Queue_enq(queue, &one);
+    Queue_enq(queue, &zero);
+    Queue_clear(queue);
+    Queue_enq(queue, &one);
+    assert(Queue_deq(queue) == &one);
     return TEST_SUCCESS;
 }
 
@@ -128,8 +322,25 @@ int main() {
      *
      */
 
+    runTest(newQueueIsEmpty);
     runTest(enqOneElement);
+    runTest(enqNotEmpty);
+    runTest(enqSize);
     runTest(enqAndDeqOneElement);
+    runTest(enqMultipleElements);
+    runTest(enqAndDeqFirstElement);
+    runTest(enqAndDeqLastElement);
+    runTest(deqSize);
+    runTest(deqMultipleElements);
+    runTest(deqToEmpty);
+    runTest(enqFullQueue);
+    runTest(enqNullElement);
+    runTest(deqFromEmpty);
+    runTest(clearToEmpty);
+    runTest(clearSize);
+    runTest(enqAfterClearing);
+    runTest(enqClearedSize);
+    runTest(enqAndDeqAfterClearing);
 
     printf("Queue Tests complete: %d / %d tests successful.\n----------------\n", success_count, total_count);
 
