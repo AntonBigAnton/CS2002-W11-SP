@@ -86,6 +86,27 @@ int newQueueSizeZero() {
     return TEST_SUCCESS;
 }
 
+/*
+ * Checks that the size of the queue is 1 after enqueueing an element.
+ */
+int enqOneElement() {
+    int one = ONE;
+    void* elt = &one;
+    Queue_enq(queue, elt);
+    assert(Queue_size(queue) == 1);
+    return TEST_SUCCESS;
+}
+
+/*
+ * Checks that an element can be enqueued and dequeued.
+ */
+int enqAndDeqOneElement() {
+    int one = ONE;
+    void* elt = &one;
+    Queue_enq(queue, elt);
+    assert(Queue_deq(queue) == elt);
+    return TEST_SUCCESS;
+}
 
 /*
  * Write more of your own test functions below (such as enqOneElement, enqAndDeqOneElement, ...)
@@ -106,6 +127,9 @@ int main() {
      * runTest(enqAndDeqOneElement);
      *
      */
+
+    runTest(enqOneElement);
+    runTest(enqAndDeqOneElement);
 
     printf("Queue Tests complete: %d / %d tests successful.\n----------------\n", success_count, total_count);
 
