@@ -37,6 +37,7 @@ bool BlockingQueue_enq(BlockingQueue* this, void* element) {
 void* BlockingQueue_deq(BlockingQueue* this) {
     if (BlockingQueue_isEmpty(this)) {
         // Block the thread until an element can be dequeued
+        return NULL;
     }
     else {
         return Queue_deq((*this).queue);

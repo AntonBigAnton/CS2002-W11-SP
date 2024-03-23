@@ -87,6 +87,11 @@ int newQueueSizeZero() {
 }
 
 /*
+ * Write more of your own test functions below (such as enqOneElement, enqAndDeqOneElement, ...)
+ * to help you verify correctness of your Queue
+ */
+
+/*
  * Checks that a new queue is empty.
  */
 int newQueueIsEmpty() {
@@ -301,11 +306,6 @@ int enqAndDeqAfterClearing() {
     assert(Queue_deq(queue) == &one);
     return TEST_SUCCESS;
 }
-
-/*
- * Write more of your own test functions below (such as enqOneElement, enqAndDeqOneElement, ...)
- * to help you verify correctness of your Queue
- */
 
 /*
  * Main function for the Queue tests which will run each user-defined test in turn.
