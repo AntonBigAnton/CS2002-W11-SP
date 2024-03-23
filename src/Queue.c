@@ -17,7 +17,7 @@
 
 
 Queue *new_Queue(int max_size) {
-    Queue* this;
+    Queue* this = malloc(sizeof(Queue));
     (*this).arr = malloc(sizeof(void*)*(max_size + 1));
     (*this).capacity = max_size;
     (*this).size = ZERO;
@@ -71,4 +71,5 @@ void Queue_clear(Queue* this) {
 
 void Queue_destroy(Queue* this) {
     free((*this).arr);
+    free(this);
 }
