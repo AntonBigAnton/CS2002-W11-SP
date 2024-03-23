@@ -6,6 +6,7 @@
  */
 
 #include <stddef.h>
+#include <stdlib.h>
 
 #include "BlockingQueue.h"
 
@@ -16,27 +17,45 @@
 
 
 BlockingQueue *new_BlockingQueue(int max_size) {
-    return NULL;
+    BlockingQueue* this = malloc(sizeof(BlockingQueue));
+    (*this).queue = new_Queue(max_size);
+    (*this).capacity = max_size;
+    return this;
 }
 
 bool BlockingQueue_enq(BlockingQueue* this, void* element) {
-    return false;
+    if (BlockingQueue_size(this) == (*this).capacity || element == NULL) {
+        // Block the thread until an element can be enqueued
+        return false;
+    }
+    else {
+        Queue_enq((*this).queue, element);
+        return true;
+    }
 }
 
 void* BlockingQueue_deq(BlockingQueue* this) {
-    return NULL;
+    if (BlockingQueue_isEmpty(this)) {
+        // Block the thread until an element can be dequeued
+    }
+    else {
+        return Queue_deq((*this).queue);
+    }
 }
 
 int BlockingQueue_size(BlockingQueue* this) {
-    return -1;
+    return Queue_size((*this).queue);
 }
 
 bool BlockingQueue_isEmpty(BlockingQueue* this) {
-    return false;
+    return Queue_isEmpty((*this).queue);
 }
 
 void BlockingQueue_clear(BlockingQueue* this) {
+    Queue_clear((*this).queue);
 }
 
 void BlockingQueue_destroy(BlockingQueue* this) {
+    Queue_destroy((*this).queue);
+    free(this);
 }

@@ -16,7 +16,8 @@ typedef struct BlockingQueue BlockingQueue;
 
 /* You should define your struct BlockingQueue here */
 struct BlockingQueue {
-    Queue queue;
+    Queue* queue;
+    int capacity;
 };
 
 /*
