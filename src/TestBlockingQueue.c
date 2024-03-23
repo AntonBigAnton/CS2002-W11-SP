@@ -93,14 +93,6 @@ int newQueueSizeZero() {
  */
 
 /*
- * Checks that the size of an empty queue is 0.
- */
-int newQueueSizeZero() {
-    assert(BlockingQueue_size(queue) == 0);
-    return TEST_SUCCESS;
-}
-
-/*
  * Checks that a new queue is empty.
  */
 int newQueueIsEmpty() {
