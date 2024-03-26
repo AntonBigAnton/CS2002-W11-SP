@@ -7,8 +7,11 @@
 
 #ifndef BLOCKING_QUEUE_H_
 #define BLOCKING_QUEUE_H_
+#define TWENTY_ONE 21
 
 #include <stdbool.h>
+#include <pthread.h>
+#include <semaphore.h>
 
 #include "Queue.h"
 
@@ -18,6 +21,8 @@ typedef struct BlockingQueue BlockingQueue;
 struct BlockingQueue {
     Queue* queue;
     int capacity;
+    pthread_mutex_t mutex_enq, mutex_deq;
+    sem_t sem_enq, sem_deq;
 };
 
 /*
