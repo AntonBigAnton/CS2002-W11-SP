@@ -7,7 +7,6 @@
 
 #ifndef BLOCKING_QUEUE_H_
 #define BLOCKING_QUEUE_H_
-#define TWENTY_ONE 21
 
 #include <stdbool.h>
 #include <pthread.h>
