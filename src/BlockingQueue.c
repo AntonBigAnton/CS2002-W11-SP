@@ -50,7 +50,7 @@ void* BlockingQueue_deq(BlockingQueue* this) {
     pthread_mutex_lock(&(*this).mutex_deq);
     return Queue_deq((*this).queue);
     pthread_mutex_unlock(&(*this).mutex_enq);
-    sem_post(&(*this).sem_deq);
+    sem_post(&(*this).sem_enq);
 }
 
 int BlockingQueue_size(BlockingQueue* this) {
