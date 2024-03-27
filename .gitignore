@@ -2,3 +2,4 @@
 *.exe
 TestQueue
 TestBlockingQueue
+.nfs*
