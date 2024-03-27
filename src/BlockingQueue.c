@@ -31,7 +31,7 @@ BlockingQueue *new_BlockingQueue(int max_size) {
     pthread_mutex_init(&(*this).mutex_deq, NULL);
 
     // Initialise the blocking queue's semaphores
-    sem_init(&(*this).sem_enq, ZERO, max_size);
+    sem_init(&(*this).sem_enq, ZERO, max_size + 1);
     sem_init(&(*this).sem_deq, ZERO, ONE);
 
     return this;
@@ -40,17 +40,19 @@ BlockingQueue *new_BlockingQueue(int max_size) {
 bool BlockingQueue_enq(BlockingQueue* this, void* element) {
     sem_wait(&(*this).sem_enq);
     pthread_mutex_lock(&(*this).mutex_enq);
-    return Queue_enq((*this).queue, element);
+    bool value = Queue_enq((*this).queue, element);
     pthread_mutex_unlock(&(*this).mutex_enq);
     sem_post(&(*this).sem_deq);
+    return value;
 }
 
 void* BlockingQueue_deq(BlockingQueue* this) {
     sem_wait(&(*this).sem_deq);
     pthread_mutex_lock(&(*this).mutex_deq);
-    return Queue_deq((*this).queue);
-    pthread_mutex_unlock(&(*this).mutex_enq);
+    void* value = Queue_deq((*this).queue);
+    pthread_mutex_unlock(&(*this).mutex_deq);
     sem_post(&(*this).sem_enq);
+    return value;
 }
 
 int BlockingQueue_size(BlockingQueue* this) {
@@ -66,9 +68,6 @@ void BlockingQueue_clear(BlockingQueue* this) {
 }
 
 void BlockingQueue_destroy(BlockingQueue* this) {
-    // Destroy the Queue object
-    Queue_destroy((*this).queue);
-
     // Destroy both mutexes
     pthread_mutex_destroy(&(*this).mutex_enq);
     pthread_mutex_destroy(&(*this).mutex_deq);
@@ -76,6 +75,9 @@ void BlockingQueue_destroy(BlockingQueue* this) {
     // Destroy both semaphores
     sem_destroy(&(*this).sem_enq);
     sem_destroy(&(*this).sem_deq);
+
+    // Destroy the Queue object
+    Queue_destroy((*this).queue);
     
     // Free the memory allocated for this blocking queue
     free(this);
