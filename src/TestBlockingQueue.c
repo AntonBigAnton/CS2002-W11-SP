@@ -235,12 +235,17 @@ int enqFullQueue() {
     pthread_t thr1, thr2;
     void *tr1;
     int one = ONE;
+
+    // Enqueue 20 elements (the queue is now full)
     for (int i = 0; i < 20; i++) {
         BlockingQueue_enq(queue, &one);
     }
-    pthread_create(&thr1, NULL, threadEnq, &one);
-    pthread_create(&thr2, NULL, threadDeq, NULL);
-    pthread_join(thr1, &tr1);
+
+    // Create two threads: thr1 will try to enqueue an element, thr2 will try to dequeue an element
+    pthread_create(&thr1, NULL, threadEnq, &one); // The semaphore sem_enq in BlockingQueue.c should make this thread wait
+    pthread_create(&thr2, NULL, threadDeq, NULL); // The semaphore sem_enq in BlockingQueue.c should wake the previous thread up
+    pthread_join(thr1, &tr1); // Access the value returned by BlockingQueue_enq
+    
     assert((bool)tr1 == true);
     return TEST_SUCCESS;
 }
@@ -259,10 +264,12 @@ int enqNullElement() {
 int deqFromEmpty() {
     pthread_t thr1, thr2;
     void *tr1;
-    pthread_create(&thr1, NULL, threadDeq, NULL);
     int one = ONE;
-    pthread_create(&thr2, NULL, threadEnq, &one);
-    pthread_join(thr1, &tr1);
+
+    // Create two threads: thr1 will try to dequeue an element, thr2 will try to enqueue an element
+    pthread_create(&thr1, NULL, threadDeq, NULL); // The semaphore sem_deq in BlockingQueue.c should make this thread wait
+    pthread_create(&thr2, NULL, threadEnq, &one); // The semaphore sem_deq in BlockingQueue.c should wake the previous thread up
+    pthread_join(thr1, &tr1); // Access the value returned by BlockingQueue_deq
     assert(tr1 == &one);
     return TEST_SUCCESS;
 }
