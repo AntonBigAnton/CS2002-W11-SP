@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <pthread.h>
+#include <unistd.h>
 
 #include "BlockingQueue.h"
 #include "myassert.h"
@@ -243,6 +244,7 @@ int enqFullQueue() {
 
     // Create two threads: thr1 will try to enqueue an element, thr2 will try to dequeue an element
     pthread_create(&thr1, NULL, threadEnq, &one); // The semaphore sem_enq in BlockingQueue.c should make this thread wait
+    sleep(1); // Makes the program sleep for 1 second, to make sure that thr1 is properly wating
     pthread_create(&thr2, NULL, threadDeq, NULL); // The semaphore sem_enq in BlockingQueue.c should wake the previous thread up
     pthread_join(thr1, &tr1); // Access the value returned by BlockingQueue_enq
     
@@ -268,6 +270,7 @@ int deqFromEmpty() {
 
     // Create two threads: thr1 will try to dequeue an element, thr2 will try to enqueue an element
     pthread_create(&thr1, NULL, threadDeq, NULL); // The semaphore sem_deq in BlockingQueue.c should make this thread wait
+    sleep(1); // Makes the program sleep for 1 second, to make sure that thr1 is properly wating
     pthread_create(&thr2, NULL, threadEnq, &one); // The semaphore sem_deq in BlockingQueue.c should wake the previous thread up
     pthread_join(thr1, &tr1); // Access the value returned by BlockingQueue_deq
     assert(tr1 == &one);
