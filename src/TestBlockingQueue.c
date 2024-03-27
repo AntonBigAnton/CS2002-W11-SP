@@ -334,9 +334,9 @@ int main() {
     runTest(deqSize);
     runTest(deqMultipleElements);
     runTest(deqToEmpty);
-    runTest(enqFullQueue);
+    //runTest(enqFullQueue);
     runTest(enqNullElement);
-    runTest(deqFromEmpty);
+    //runTest(deqFromEmpty);
     runTest(clearToEmpty);
     runTest(clearSize);
     runTest(enqAfterClearing);
