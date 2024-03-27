@@ -7,6 +7,7 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <pthread.h>
 #include <semaphore.h>
 
@@ -26,32 +27,66 @@ BlockingQueue *new_BlockingQueue(int max_size) {
     (*this).queue = new_Queue(max_size);
     (*this).capacity = max_size;
 
-    // Initialise the blocking queue's mutexes
-    pthread_mutex_init(&(*this).mutex_enq, NULL);
-    pthread_mutex_init(&(*this).mutex_deq, NULL);
+    // Initialise the blocking queue's mutexes, and check that they've been created properly
+    if (pthread_mutex_init(&(*this).mutex_enq, NULL)) {
+        exit_error(this, "Mutex 'mutex_enq' not created!");
+    }
+    if (pthread_mutex_init(&(*this).mutex_deq, NULL)) {
+        exit_error(this, "Mutex 'mutex_deq' not created!");
+    }
 
-    // Initialise the blocking queue's semaphores
-    sem_init(&(*this).sem_enq, ZERO, max_size);
-    sem_init(&(*this).sem_deq, ZERO, ZERO);
+    // Initialise the blocking queue's semaphores, and check that they've been created properly
+    if (sem_init(&(*this).sem_enq, ZERO, max_size)) {
+        exit_error(this, "Semaphore 'sem_enq' not created!");
+    }
+    if (sem_init(&(*this).sem_deq, ZERO, ZERO)) {
+        exit_error(this, "Semaphore 'sem_deq' not created!");
+    }
 
     return this;
 }
 
 bool BlockingQueue_enq(BlockingQueue* this, void* element) {
-    sem_wait(&(*this).sem_enq);
-    pthread_mutex_lock(&(*this).mutex_enq);
+    // Decrement the sem_enq semaphore and check that it has been done
+    if (sem_wait(&(*this).sem_enq)) {
+        exit_error(this, "Semaphore 'sem_enq' not decremented!");
+    }
+    // Lock the mutex_enq mutex and check that it has been done
+    if (pthread_mutex_lock(&(*this).mutex_enq)) {
+        exit_error(this, "Mutex 'mutex_enq' not locked!");
+    }
+    // Enqueue the element
     bool value = Queue_enq((*this).queue, element);
-    pthread_mutex_unlock(&(*this).mutex_enq);
-    sem_post(&(*this).sem_deq);
+    // Unlock the mutex_enq mutex and check that it has been done
+    if (pthread_mutex_unlock(&(*this).mutex_enq)) {
+        exit_error(this, "Mutex 'mutex_enq' not unlocked!");
+    }
+    // Increment the sem_deq semaphore and check that it has been done
+    if (sem_post(&(*this).sem_deq)) {
+        exit_error(this, "Semaphore 'sem_deq' not incremented!");
+    }
     return value;
 }
 
 void* BlockingQueue_deq(BlockingQueue* this) {
-    sem_wait(&(*this).sem_deq);
-    pthread_mutex_lock(&(*this).mutex_deq);
+    // Decrement the sem_deq semaphore and check that it has been done
+    if (sem_wait(&(*this).sem_deq)) {
+        exit_error(this, "Semaphore 'sem_deq' not decremented!");
+    }
+    // Lock the mutex_deq mutex and check that it has been done
+    if (pthread_mutex_lock(&(*this).mutex_deq)) {
+        exit_error(this, "Mutex 'mutex_deq' not locked!");
+    }
+    // Dequeue the element
     void* value = Queue_deq((*this).queue);
-    pthread_mutex_unlock(&(*this).mutex_deq);
-    sem_post(&(*this).sem_enq);
+    // Unlock the mutex_deq mutex and check that it has been done
+    if (pthread_mutex_unlock(&(*this).mutex_deq)) {
+        exit_error(this, "Mutex 'mutex_deq' not unlocked!");
+    }
+    // Increment the sem_enq semaphore and check that it has been done
+    if (sem_post(&(*this).sem_enq)) {
+        exit_error(this, "Semaphore 'sem_enq' not incremented!");
+    }
     return value;
 }
 
@@ -81,4 +116,10 @@ void BlockingQueue_destroy(BlockingQueue* this) {
     
     // Free the memory allocated for this blocking queue
     free(this);
+}
+
+void exit_error(BlockingQueue* this, char* msg) {
+    perror(msg);
+    BlockingQueue_destroy(this);
+    exit(EXIT_FAILURE);
 }
