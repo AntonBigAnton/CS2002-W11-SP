@@ -31,8 +31,8 @@ BlockingQueue *new_BlockingQueue(int max_size) {
     pthread_mutex_init(&(*this).mutex_deq, NULL);
 
     // Initialise the blocking queue's semaphores
-    sem_init(&(*this).sem_enq, ZERO, max_size + 1);
-    sem_init(&(*this).sem_deq, ZERO, ONE);
+    sem_init(&(*this).sem_enq, ZERO, max_size);
+    sem_init(&(*this).sem_deq, ZERO, ZERO);
 
     return this;
 }
