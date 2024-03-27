@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stddef.h>
+#include <pthread.h>
 
 #include "BlockingQueue.h"
 #include "myassert.h"
@@ -214,7 +215,7 @@ int deqToEmpty() {
 }
 
 /*
- * Checks that no element can be enqueued to a full queue.
+ * Checks that no element can be enqueued to a full queue until space is freed.
  */
 int enqFullQueue() {
     int one = ONE;
@@ -234,10 +235,16 @@ int enqNullElement() {
 }
 
 /*
- * Checks that dequeueing from an empty queue returns NULL.
+ * Checks that no element can be dequeued from an empty queue until an element is enqueued.
  */
 int deqFromEmpty() {
-    assert(BlockingQueue_deq(queue) == NULL);
+    pthread_t thr1, thr2;
+    void* tr1;
+    pthread_create(&thr1, NULL, BlockingQueue_deq(queue), NULL);
+    int one = ONE;
+    pthread_create(&thr2, NULL, &BlockingQueue_enq(queue, &one), NULL);
+    pthread_join(thr1, &tr1);
+    assert(tr1 == &one);
     return TEST_SUCCESS;
 }
 
@@ -336,7 +343,7 @@ int main() {
     runTest(deqToEmpty);
     //runTest(enqFullQueue);
     runTest(enqNullElement);
-    //runTest(deqFromEmpty);
+    runTest(deqFromEmpty);
     runTest(clearToEmpty);
     runTest(clearSize);
     runTest(enqAfterClearing);
