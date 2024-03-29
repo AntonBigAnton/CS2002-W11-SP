@@ -22,7 +22,7 @@ struct Queue {
      *      - capacity: The queue's maximum capacity;
      *      - size: The number of currently enqueued elements;
      *      - front: The index of the element at the front of the queue;
-     *      - rear: The index of the element at the back of the queue;
+     *      - rear: The index of the element at the back of the queue.
      */
     void** arr;
     int capacity;
