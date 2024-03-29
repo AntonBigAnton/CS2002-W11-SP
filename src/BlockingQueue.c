@@ -119,7 +119,7 @@ void BlockingQueue_destroy(BlockingQueue* this) {
 }
 
 void exit_error(BlockingQueue* this, char* msg) {
-    perror(msg);
-    BlockingQueue_destroy(this);
-    exit(EXIT_FAILURE);
+    perror(msg); // Print out the error message
+    BlockingQueue_destroy(this); // Destroy the blocking queue
+    exit(EXIT_FAILURE); // Terminate the code
 }

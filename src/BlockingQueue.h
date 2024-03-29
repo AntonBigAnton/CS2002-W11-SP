@@ -65,7 +65,7 @@ void BlockingQueue_clear(BlockingQueue* this);
 void BlockingQueue_destroy(BlockingQueue* this);
 
 /*
- * Destroys this Queue by freeing the memory used by the Queue.
+ * Terminates the code, destroys the blocking queue and prints out an error message if an error is detected.
  */
 void exit_error(BlockingQueue* this, char* msg);
 
