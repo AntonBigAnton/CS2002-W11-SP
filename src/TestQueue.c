@@ -145,7 +145,7 @@ int enqMultipleElements() {
     int one = ONE;
     int zero = ZERO;
     Queue_enq(queue, &one);
-    int size = Queue_size(queue);
+    int size = Queue_size(queue); // The size of the queue after only enqueueing the first element
     Queue_enq(queue, &zero);
     assert(Queue_size(queue) == size+1);
     return TEST_SUCCESS;
@@ -195,7 +195,7 @@ int deqMultipleElements() {
     int zero = ZERO;
     Queue_enq(queue, &one);
     Queue_enq(queue, &zero);
-    int size = Queue_size(queue);
+    int size = Queue_size(queue); // The size of the queue before dequeueing any elements
     Queue_deq(queue);
     assert(Queue_size(queue) == size-1);
     return TEST_SUCCESS;
