@@ -180,7 +180,7 @@ int enqAndDeqLastElement() {
 }
 
 /*
- * Checks that the size of the queue is 0 after dequeueing the final element.
+ * Checks that the size of the queue is 0 after dequeuing the final element.
  */
 int deqSize() {
     int one = ONE;
@@ -191,21 +191,21 @@ int deqSize() {
 }
 
 /*
- * Checks that the size of the queue is reduced by 1 after dequeueing an element.
+ * Checks that the size of the queue is reduced by 1 after dequeuing an element.
  */
 int deqMultipleElements() {
     int one = ONE;
     int zero = ZERO;
     BlockingQueue_enq(queue, &one);
     BlockingQueue_enq(queue, &zero);
-    int size = BlockingQueue_size(queue); // The size of the queue before dequeueing any elements
+    int size = BlockingQueue_size(queue); // The size of the queue before dequeuing any elements
     BlockingQueue_deq(queue);
     assert(BlockingQueue_size(queue) == size-1);
     return TEST_SUCCESS;
 }
 
 /*
- * Checks that the queue is empty after dequeueing the final element.
+ * Checks that the queue is empty after dequeuing the final element.
  */
 int deqToEmpty() {
     int one = ONE;
@@ -227,8 +227,8 @@ void *threadEnq(void *arg) {
 }
 
 /*
- * Thread function for dequeueing.
- * This function is non-necessary, but I like having the same amount of functions for both enqueueing and dequeueing.
+ * Thread function for dequeuing.
+ * This function is non-necessary, but I like having the same amount of functions for both enqueueing and dequeuing.
  */
 void *threadDeq() {
     return (void*)BlockingQueue_deq(queue);

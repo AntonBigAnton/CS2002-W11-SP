@@ -23,7 +23,7 @@ struct BlockingQueue {
      *      - queue: The blocking queue, represented as a Queue object;
      *      - capacity: The blocking queue's maximum capacity;
      *      - mutex_enq and mutex_deq: The mutexes used to enqueue and dequeue elements respectively;
-     *      - sem_enq and sem_deq: The semaphores used before enqueueing and dequeueing elements respectively;
+     *      - sem_enq and sem_deq: The semaphores used before enqueueing and dequeuing elements respectively;
      */
     Queue* queue;
     int capacity;

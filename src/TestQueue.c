@@ -177,7 +177,7 @@ int enqAndDeqLastElement() {
 }
 
 /*
- * Checks that the size of the queue is 0 after dequeueing the final element.
+ * Checks that the size of the queue is 0 after dequeuing the final element.
  */
 int deqSize() {
     int one = ONE;
@@ -188,21 +188,21 @@ int deqSize() {
 }
 
 /*
- * Checks that the size of the queue is reduced by 1 after dequeueing an element.
+ * Checks that the size of the queue is reduced by 1 after dequeuing an element.
  */
 int deqMultipleElements() {
     int one = ONE;
     int zero = ZERO;
     Queue_enq(queue, &one);
     Queue_enq(queue, &zero);
-    int size = Queue_size(queue); // The size of the queue before dequeueing any elements
+    int size = Queue_size(queue); // The size of the queue before dequeuing any elements
     Queue_deq(queue);
     assert(Queue_size(queue) == size-1);
     return TEST_SUCCESS;
 }
 
 /*
- * Checks that the queue is empty after dequeueing the final element.
+ * Checks that the queue is empty after dequeuing the final element.
  */
 int deqToEmpty() {
     int one = ONE;
@@ -233,7 +233,7 @@ int enqNullElement() {
 }
 
 /*
- * Checks that dequeueing from an empty queue returns NULL.
+ * Checks that dequeuing from an empty queue returns NULL.
  */
 int deqFromEmpty() {
     assert(Queue_deq(queue) == NULL);
