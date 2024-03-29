@@ -55,7 +55,7 @@ bool BlockingQueue_enq(BlockingQueue* this, void* element) {
     if (pthread_mutex_lock(&(*this).mutex_enq)) {
         exit_error(this, "Mutex 'mutex_enq' not locked!");
     }
-    // Enqueue the element
+    // Enqueue the element using the Queue_enq function
     bool value = Queue_enq((*this).queue, element);
     // Unlock the mutex_enq mutex and check that it has been done
     if (pthread_mutex_unlock(&(*this).mutex_enq)) {
@@ -77,7 +77,7 @@ void* BlockingQueue_deq(BlockingQueue* this) {
     if (pthread_mutex_lock(&(*this).mutex_deq)) {
         exit_error(this, "Mutex 'mutex_deq' not locked!");
     }
-    // Dequeue the element
+    // Dequeue the element using the Queue_deq function
     void* value = Queue_deq((*this).queue);
     // Unlock the mutex_deq mutex and check that it has been done
     if (pthread_mutex_unlock(&(*this).mutex_deq)) {
@@ -91,15 +91,15 @@ void* BlockingQueue_deq(BlockingQueue* this) {
 }
 
 int BlockingQueue_size(BlockingQueue* this) {
-    return Queue_size((*this).queue);
+    return Queue_size((*this).queue); // Queue_size returns the number of elements currently in this blocking queue
 }
 
 bool BlockingQueue_isEmpty(BlockingQueue* this) {
-    return Queue_isEmpty((*this).queue);
+    return Queue_isEmpty((*this).queue); // Queue_isEmpty returns true if this blocking queue is empty, false otherwise
 }
 
 void BlockingQueue_clear(BlockingQueue* this) {
-    Queue_clear((*this).queue);
+    Queue_clear((*this).queue); // Queue_clear clears this blocking queue returning it to an empty state
 }
 
 void BlockingQueue_destroy(BlockingQueue* this) {
@@ -111,10 +111,10 @@ void BlockingQueue_destroy(BlockingQueue* this) {
     sem_destroy(&(*this).sem_enq);
     sem_destroy(&(*this).sem_deq);
 
-    // Destroy the Queue object
+    // Free the memory used by this blocking queue's Queue object by destroy it using Queue_destroy
     Queue_destroy((*this).queue);
     
-    // Free the memory allocated for this blocking queue
+    // Free the memory allocated for itself
     free(this);
 }
 
