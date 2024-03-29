@@ -16,6 +16,14 @@ typedef struct Queue Queue;
 
 /* You should define your struct Queue here */
 struct Queue {
+    /*
+     * A Queue struct has 5 attributes:
+     *      - arr: The queue, represented as an array of void* elements;
+     *      - capacity: The queue's maximum capacity;
+     *      - size: The number of currently enqueued elements;
+     *      - front: The index of the element at the front of the queue;
+     *      - rear: The index of the element at the back of the queue;
+     */
     void** arr;
     int capacity;
     int size;
