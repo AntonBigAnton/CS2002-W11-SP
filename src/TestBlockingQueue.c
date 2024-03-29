@@ -148,7 +148,7 @@ int enqMultipleElements() {
     int one = ONE;
     int zero = ZERO;
     BlockingQueue_enq(queue, &one);
-    int size = BlockingQueue_size(queue);
+    int size = BlockingQueue_size(queue); // The size of the queue after only enqueueing the first element
     BlockingQueue_enq(queue, &zero);
     assert(BlockingQueue_size(queue) == size+1);
     return TEST_SUCCESS;
@@ -198,7 +198,7 @@ int deqMultipleElements() {
     int zero = ZERO;
     BlockingQueue_enq(queue, &one);
     BlockingQueue_enq(queue, &zero);
-    int size = BlockingQueue_size(queue);
+    int size = BlockingQueue_size(queue); // The size of the queue before dequeueing any elements
     BlockingQueue_deq(queue);
     assert(BlockingQueue_size(queue) == size-1);
     return TEST_SUCCESS;
@@ -217,6 +217,10 @@ int deqToEmpty() {
 
 /*
  * Thread function for enqueueing.
+ * It takes one void* argument, arg, which is the element to enqueue.
+ * This function is necessary, as the start_routine function taken as argument in pthread_create can only have one argument.
+ * Therefore, as I need two arguments to enqueue to the blocking queue, I created this function as an intermediate to convert
+ * the BlockingQueue_enq function to a single parameter function.
  */
 void *threadEnq(void *arg) {
     return (void*)BlockingQueue_enq(queue, arg);
@@ -224,6 +228,7 @@ void *threadEnq(void *arg) {
 
 /*
  * Thread function for dequeueing.
+ * This function is non-necessary, but I like having the same amount of functions for both enqueueing and dequeueing.
  */
 void *threadDeq() {
     return (void*)BlockingQueue_deq(queue);
