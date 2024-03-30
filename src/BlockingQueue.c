@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <errno.h>
 
 #include "BlockingQueue.h"
 
@@ -144,7 +145,8 @@ void BlockingQueue_destroy(BlockingQueue* this) {
 }
 
 void exit_error(BlockingQueue* this, char* msg) {
-    perror(msg); // Print out the error message
+    perror(msg);
+    fprintf(stderr, "errno = %i\n", errno); // Print out the error message
     BlockingQueue_destroy(this); // Destroy the blocking queue
     exit(EXIT_FAILURE); // Terminate the code
 }
