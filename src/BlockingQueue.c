@@ -101,12 +101,27 @@ bool BlockingQueue_isEmpty(BlockingQueue* this) {
 void BlockingQueue_clear(BlockingQueue* this) {
     Queue_clear((*this).queue); // Queue_clear clears this blocking queue returning it to an empty state
 
-    // Reset the blocking queue's semaphores, and check that they've been reset properly
-    if (sem_init(&(*this).sem_enq, ZERO, (*this).capacity)) {
+    // Access the semaphores' current values, and check that they've been accessed properly
+    int value_enq;
+    int value_deq;
+    if (sem_getvalue(&(*this).sem_enq, &value_enq)) {
         exit_error(this, "Semaphore 'sem_enq' not reset!");
     }
-    if (sem_init(&(*this).sem_deq, ZERO, ZERO)) {
+    if (sem_getvalue(&(*this).sem_deq, &value_deq)) {
         exit_error(this, "Semaphore 'sem_deq' not reset!");
+    }
+
+    // Reset the blocking queue's semaphores to their original values, and check that they've been reset properly
+    for (int i = value_enq; i < (*this).capacity; i++) {
+        if (sem_post(&(*this).sem_enq)) {
+            exit_error(this, "Semaphore 'sem_enq' not reset!");
+        }
+    }
+
+    for (int i = value_deq; i > 0; i--) {
+        if (sem_wait(&(*this).sem_deq)) {
+            exit_error(this, "Semaphore 'sem_deq' not reset!");
+        }
     }
 }
 
