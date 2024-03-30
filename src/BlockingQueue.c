@@ -100,6 +100,14 @@ bool BlockingQueue_isEmpty(BlockingQueue* this) {
 
 void BlockingQueue_clear(BlockingQueue* this) {
     Queue_clear((*this).queue); // Queue_clear clears this blocking queue returning it to an empty state
+
+    // Reset the blocking queue's semaphores, and check that they've been reset properly
+    if (sem_init(&(*this).sem_enq, ZERO, (*this).capacity)) {
+        exit_error(this, "Semaphore 'sem_enq' not reset!");
+    }
+    if (sem_init(&(*this).sem_deq, ZERO, ZERO)) {
+        exit_error(this, "Semaphore 'sem_deq' not reset!");
+    }
 }
 
 void BlockingQueue_destroy(BlockingQueue* this) {
