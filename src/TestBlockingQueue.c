@@ -243,7 +243,7 @@ int enqFullQueue() {
     int one = ONE;
 
     // Enqueue 20 elements (the queue is now full)
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < DEFAULT_MAX_QUEUE_SIZE; i++) {
         BlockingQueue_enq(queue, &one);
     }
 
@@ -350,6 +350,21 @@ int enqAndDeqAfterClearing() {
 }
 
 /*
+ * Checks that an element can be enqueued and dequeued after clearing the full queue.
+ * This tests if the semaphores have been properly reset.
+ */
+int enqAndDeqAfterClearingFromFull() {
+    int one = ONE;
+    for (int i = 0; i < DEFAULT_MAX_QUEUE_SIZE; i++) {
+        BlockingQueue_enq(queue, &one);
+    }
+    BlockingQueue_clear(queue);
+    BlockingQueue_enq(queue, &one)
+    assert(BlockingQueue_deq(queue) == &one);
+    return TEST_SUCCESS;
+}
+
+/*
  * Main function for the BlockingQueue tests which will run each user-defined test in turn.
  */
 
@@ -383,6 +398,7 @@ int main() {
     runTest(enqAfterClearing);
     runTest(enqClearedSize);
     runTest(enqAndDeqAfterClearing);
+    runTest(enqAndDeqAfterClearingFromFull);
 
     printf("\nBlockingQueue Tests complete: %d / %d tests successful.\n----------------\n", success_count, total_count);
 

@@ -217,7 +217,8 @@ int deqToEmpty() {
  */
 int enqFullQueue() {
     int one = ONE;
-    for (int i = 0; i < 20; i++) {
+    // Enqueue 20 elements (the queue is now full)
+    for (int i = 0; i < DEFAULT_MAX_QUEUE_SIZE; i++) {
         Queue_enq(queue, &one);
     }
     assert(Queue_enq(queue, &one) == false);
