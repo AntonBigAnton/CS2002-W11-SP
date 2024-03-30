@@ -62,7 +62,7 @@ bool BlockingQueue_enq(BlockingQueue* this, void* element) {
         exit_error(this, "Mutex 'mutex_enq' not unlocked!");
     }
     // Increment the sem_deq semaphore and check that it has been done if any element has been enqueued
-    if (!value) {
+    if (value) {
         if (sem_post(&(*this).sem_deq)) {
             exit_error(this, "Semaphore 'sem_deq' not incremented!");
         }
