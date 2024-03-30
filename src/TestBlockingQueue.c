@@ -359,7 +359,7 @@ int enqAndDeqAfterClearingFromFull() {
         BlockingQueue_enq(queue, &one);
     }
     BlockingQueue_clear(queue);
-    BlockingQueue_enq(queue, &one)
+    BlockingQueue_enq(queue, &one);
     assert(BlockingQueue_deq(queue) == &one);
     return TEST_SUCCESS;
 }
