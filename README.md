@@ -40,7 +40,7 @@ To test my BlockingQueue implementation, please use the Makefile and run the fol
 ./TestBlockingQueue
 ```
   
-After a brief delay of approximately 2 seconds (this is normal!), the output should be:
+After a brief delay of approximately 2 seconds (this is normal), the output should be:
 ```bash
   
 BlockingQueue Tests complete: 22 / 22 tests successful.
